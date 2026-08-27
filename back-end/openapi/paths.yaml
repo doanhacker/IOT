@@ -1,0 +1,160 @@
+tags:
+  - name: DataSensor
+    description: Dữ liệu cảm biến
+  - name: ActionHistory
+    description: Dữ liệu điều khiển thiết bị
+paths:
+  /data-sensor:
+    get:
+      tags:
+        - DataSensor
+      summary: Lấy dữ liệu cảm biến.
+      operationId: getDataSensor
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          description: Trang hiện tại (bắt đầu từ 1).
+        - name: sizePage
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          description: Số bản ghi trên mỗi trang.
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [id, temperature, humidity, light, created_at]
+            example: "id"
+          description: Trường để sắp xếp.
+        - name: statusSortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            example: "desc"
+          description: Thứ tự sắp xếp.
+        - name: searchBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [all, temperature, light, humidity, datetime]
+            example: "temperature"
+          description: Trường để tìm kiếm.
+        - name: searchValue
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "28.5"
+          description: Giá trị tìm kiếm theo trường `searchBy`.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataSensorResponse"
+        "400":
+          description: "Invalid input: page and sizePage must be numbers"
+        "500":
+          description: "Internal server error"
+
+  /action-history:
+    get:
+      tags:
+        - ActionHistory
+      summary: Lấy dữ liệu điều khiển thiết bị.
+      operationId: getActionHistory
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+          description: Trang hiện tại (bắt đầu từ 1).
+        - name: sizePage
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          description: Số bản ghi trên mỗi trang.
+        - name: device
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [all, fan, led, ac]
+            example: "fan"
+          description: Tên thiết bị.
+        - name: action
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [all, on,off]
+            example: "on"
+          description: Hành động của thiết bị.
+        - name: datetime
+          in: query
+          required: false
+          schema:
+            type: string
+            example: ""
+          description: Ngày giờ lọc dữ liệu (YYYY-MM-DD HH:MM:SS).
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [id,device,action, created_at]
+            example: "id"
+          description: Trường để sắp xếp.
+        - name: statusSortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            example: "desc"
+          description: Thứ tự sắp xếp (tăng dần hoặc giảm dần).
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionHistoryResponse"
+        "400":
+          description: "Invalid input: page and sizePage must be numbers"
+        "500":
+          description: "Internal server error"
+  /pub-data-device:
+    post:
+      tags:
+        - ActionHistory
+      summary: Điều khiển thiết bị.
+      operationId: deviceControl
+      requestBody:
+        description: Điều khiển thiết bị.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceControlRequest"
+      responses:
+        "200":
+          description: successful operation

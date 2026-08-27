@@ -1,0 +1,125 @@
+components:
+  schemas:
+    DataSensor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1044
+        temperature:
+          type: number
+          format: float
+          example: 28.5
+        light:
+          type: number
+          format: float
+          example: 51.92
+        humidity:
+          type: number
+          format: float
+          example: 54.3
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-09-19T07:57:23.000Z"
+    DataSensorRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int64
+          example: 1
+        sizePage:
+          type: integer
+          format: int64
+          example: 10
+        sortBy:
+          type: string
+          enum: [id, temperature,humidity,light,created_at]
+          example: "id"
+        statusSortBy:
+          type: string
+          enum: [asc, desc]
+          example: "desc"
+        searchBy:
+          type: string
+          example: "temperature"
+        searchValue:
+          type: string
+          example: "28.5"
+    DataSensorResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/DataSensor"
+        totalRecord:
+          type: integer
+          example: 1
+    ActionHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1044
+        device:
+          type: string
+          example: "fan"
+        action:
+          type: string
+          example: "on"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-09-19T07:57:23.000Z"
+    ActionHistoryRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int64
+          example: 1
+        sizePage:
+          type: integer
+          format: int64
+          example: 10
+        device:
+          type: string
+          example: "fan"
+        action:
+          type: string
+          example: "on"
+        datetime:
+          type: string
+          example: ""
+        sortBy:
+          type: string
+          example: "id"
+        statusSortBy:
+          type: string
+          example: "desc"
+    ActionHistoryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActionHistory"
+        totalRecord:
+          type: integer
+          example: 1
+    DeviceControlRequest:
+      type: object
+      properties:
+        device:
+          type: string
+          enum: [fan, led, ac]
+          example: "fan"
+        status:
+          type: string
+          enum: [0, 1]
+          example: 0
+      required:
+        - device
+        - status
